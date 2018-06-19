@@ -10,12 +10,17 @@ class Renderer:
             self.is_halted = halt.is_set
             self.stop = halt.set
 
+            self._thread = Thread(target=self.run)
+            self._thread.start()
+
         self.canvas = canvas
-        self.render_thread = Thread(target=self.run)
         self.interval = interval or self.default_interval
 
     def is_halted(self):
         return False
+
+    def stop(self):
+        pass
 
     def run(self):
         from time import time, sleep
@@ -27,12 +32,6 @@ class Renderer:
                 last = now
             else:
                 sleep(self.interval / 10)
-
-    def start(self):
-        self.render_thread.start()
-
-    def stop(self):
-        pass
 
     def render(self):
         raise NotImplementedError

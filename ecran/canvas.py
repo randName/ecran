@@ -20,10 +20,14 @@ class Canvas:
             self.stop = halt.set
 
             from threading import Thread
-            self.update_thread = Thread(target=self.run)
+            self._thread = Thread(target=self.run)
+            self._thread.start()
 
     def is_halted(self):
         return False
+
+    def stop(self):
+        pass
 
     def run(self):
         from time import time, sleep
@@ -36,12 +40,6 @@ class Canvas:
                 last = now
             else:
                 sleep(self.interval / 10)
-
-    def start(self):
-        self.update_thread.start()
-
-    def stop(self):
-        pass
 
     @property
     def shape(self):
