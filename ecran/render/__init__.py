@@ -11,13 +11,15 @@ class Renderer:
             self.stop = halt.set
 
             self._thread = Thread(target=self.run)
-            self._thread.start()
 
         self.canvas = canvas
         self.interval = interval or self.default_interval
 
     def is_halted(self):
         return False
+
+    def start(self):
+        self._thread.start()
 
     def stop(self):
         pass
@@ -48,6 +50,7 @@ class FlatRenderer(Renderer):
         self.size = self.canvas.array.shape[:2]
         self.screen = self.display.set_mode(self.size)
         self.screen.fill((0, 0, 0))
+        self.start()
 
     def render(self):
         show = self.canvas.array[:, ::-1]
