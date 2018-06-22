@@ -8,6 +8,7 @@ pygame = "*"
 numpy = "*"
 flask = "*"
 gunicorn = "*"
+pyserial = "*"
 
 [dev-packages]
 "flake8" = "*"
