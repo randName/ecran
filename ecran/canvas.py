@@ -66,9 +66,19 @@ class Canvas:
     def mask(self):
         return np.ones(self.size, np.uint8)
 
+    def clear(self):
+        self.animations.clear()
+
     def add(self, a):
         self.animations.append(a)
         self.animations.sort(key=lambda a: a.depth)
+
+    def update(self, name, params):
+        try:
+            ani = next(a for a in self.animations if a.uid == name)
+            ani.update(**params)
+        except StopIteration:
+            pass
 
     def render(self, dt, t):
         self.animations = [a for a in self.animations if a.update(dt, t)]
@@ -82,6 +92,3 @@ class Canvas:
             cover = mask > 0
             bg[cover] = fg[cover]
         return (bg * 255).astype(np.uint8)
-
-    def __len__(self):
-        return self.len
