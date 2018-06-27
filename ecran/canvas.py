@@ -1,9 +1,12 @@
+from threading import Thread
+
 import numpy as np
 
 
 class Canvas:
     """Raw color data and animation handler"""
 
+    fps_interval = 2
     default_interval = 1/24
 
     def __init__(self, size, interval=None, halt=None):
@@ -12,6 +15,8 @@ class Canvas:
         self.array = np.zeros(size + (3,), np.uint8)
         self.index = np.indices(self.array.shape[:-1], np.float32)
 
+        self.fps = 0
+        self.frames = 0
         self.interval = interval or self.default_interval
         self.animations = []
 
@@ -19,9 +24,8 @@ class Canvas:
             self.is_halted = halt.is_set
             self.stop = halt.set
 
-            from threading import Thread
-            self._thread = Thread(target=self.run)
-            self._thread.start()
+        self._task = Thread(target=self._run)
+        self._task.start()
 
     def is_halted(self):
         return False
@@ -29,14 +33,23 @@ class Canvas:
     def stop(self):
         pass
 
-    def run(self):
+    def _run(self):
         from time import time, sleep
         last = time()
+        last_fps = last
         while not self.is_halted():
             now = time()
             dt = now - last
+            df = now - last_fps
+
+            if df >= self.fps_interval:
+                self.fps = self.frames / df
+                self.frames = 0
+                last_fps = now
+
             if dt > self.interval:
-                self.update(dt, now)
+                self.array = self.render(dt, now)
+                self.frames += 1
                 last = now
             else:
                 sleep(self.interval / 10)
@@ -57,11 +70,10 @@ class Canvas:
         self.animations.append(a)
         self.animations.sort(key=lambda a: a.depth)
 
-    def update(self, dt, t):
+    def render(self, dt, t):
         self.animations = [a for a in self.animations if a.update(dt, t)]
         if not self.animations:
-            self.array = np.zeros(self.shape, np.uint8)
-            return
+            return np.zeros(self.shape, np.uint8)
 
         bg = self.blank
         for a in self.animations:
@@ -69,7 +81,7 @@ class Canvas:
             fg *= a.alpha
             cover = mask > 0
             bg[cover] = fg[cover]
-        self.array = (bg * 255).astype(np.uint8)
+        return (bg * 255).astype(np.uint8)
 
     def __len__(self):
         return self.len
