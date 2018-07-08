@@ -66,7 +66,7 @@ def canvas_api():
         canvas.clear()
     elif action == 'add':
         try:
-            atype = data['type']
+            atype = params.pop('type')
         except KeyError:
             raise APIError('no animation type specified')
         try:
