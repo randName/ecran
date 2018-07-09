@@ -3,6 +3,11 @@ verify_ssl = true
 name = "pypi"
 url = "https://pypi.org/simple"
 
+[[source]]
+url = "https://www.piwheels.org/simple"
+name = "piwheels"
+verify_ssl = true
+
 [packages]
 pygame = "*"
 numpy = "*"
