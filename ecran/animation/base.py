@@ -56,14 +56,13 @@ class Animation:
 
         self.passed += dt
 
-        if self.fade_in and self.alpha < 1:
+        if self.fade_out and self.remain <= self.fade_out:
+            self.alpha = self.remain / self.fade_out
+        elif self.fade_in and self.alpha < 1:
             if self.passed >= self.fade_in:
                 self.alpha = 1
             else:
                 self.alpha = self.passed / self.fade_in
-        elif self.fade_out:
-            if self.remain <= self.fade_out:
-                self.alpha = self.remain / self.fade_out
 
         if self.timeout and self.passed > self.timeout:
             return False
