@@ -1,3 +1,8 @@
+try:
+    from serial import Serial
+except ImportError:
+    raise ImportError('serial not installed')
+
 from numpy import full_like, minimum
 
 from .base import Renderer
@@ -8,7 +13,6 @@ LED_HEADER = bytes((0xFF, 0xFF))
 class SerialRenderer(Renderer):
 
     def __init__(self, port='/dev/ttyUSB0', baud=400000, tout=1, **kw):
-        from serial import Serial
         super().__init__(**kw)
 
         self.clamp = full_like(self.canvas.array, 0xFE)

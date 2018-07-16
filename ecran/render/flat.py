@@ -1,4 +1,7 @@
-from pygame import display, mouse, surfarray
+try:
+    from pygame import display, mouse, surfarray
+except ImportError:
+    raise ImportError('pygame not installed')
 
 from .base import Renderer
 

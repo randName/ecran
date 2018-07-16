@@ -9,14 +9,14 @@ name = "piwheels"
 verify_ssl = true
 
 [packages]
-pygame = "*"
 numpy = "*"
 flask = "*"
 gunicorn = "*"
-pyserial = "*"
 
 [dev-packages]
 "flake8" = "*"
+pygame = "*"
+pyserial = "*"
 
 [requires]
 python_version = "3.5"
