@@ -2,8 +2,8 @@ from threading import Event
 
 from flask import Flask, json, request
 
+from . import animation
 from .canvas import Canvas
-from .animation import animations
 
 app = Flask(__name__)
 app.config.from_envvar('ECRAN_SETTINGS')
@@ -17,6 +17,8 @@ halt = Event()
 canvas = Canvas(size, halt=halt)
 renderer = Renderer(canvas=canvas, halt=halt, **r_kwargs)
 
+animations = animation.animations
+
 
 @app.route('/')
 def index():
@@ -29,7 +31,8 @@ def shutdown():
     try:
         request.environ.get('werkzeug.server.shutdown')()
     except TypeError:
-        pass
+        from sys import exit
+        exit(4)
     return 'écran shut down'
 
 
@@ -37,7 +40,8 @@ def shutdown():
 def reload():
     import importlib
     importlib.reload(animation)
-    from .animation import animations
+    global animations
+    animations = animation.animations
     return 'animations reloaded'
 
 

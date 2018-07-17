@@ -12,15 +12,23 @@ class Ecran {
   }
 
   clear() {
-    this.send('clear');
+    return this.send('clear');
   }
 
   add(type, name, params) {
-    this.send('add', name, Object.assign({type}, params));
+    return this.send('add', name, Object.assign({type}, params));
   }
 
   update(name, params) {
-    this.send('update', name, params);
+    return this.send('update', name, params);
+  }
+
+  shutdown() {
+    fetch('shutdown');
+  }
+
+  reload() {
+    fetch('reload');
   }
 }
 

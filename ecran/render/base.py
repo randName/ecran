@@ -43,12 +43,12 @@ class SimpleRenderer(Renderer):
 
     def __init__(self, render=None, **kw):
         super().__init__(**kw)
-        if render is not None:
-            self.render = render
+        self._render = render
         self.start()
 
     def render(self):
-        pass
+        if self._render:
+            self._render(self)
 
 
 class MultiRenderer(Renderer):

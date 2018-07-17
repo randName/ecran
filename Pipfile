@@ -8,6 +8,9 @@ url = "https://www.piwheels.org/simple"
 name = "piwheels"
 verify_ssl = true
 
+[scripts]
+server = 'gunicorn ecran:app'
+
 [packages]
 numpy = "*"
 flask = "*"
