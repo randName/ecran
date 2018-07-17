@@ -33,6 +33,14 @@ def shutdown():
     return 'écran shut down'
 
 
+@app.route('/reload')
+def reload():
+    import importlib
+    importlib.reload(animation)
+    from .animation import animations
+    return 'animations reloaded'
+
+
 class APIError(Exception):
     pass
 
